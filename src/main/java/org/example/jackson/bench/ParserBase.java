@@ -866,7 +866,7 @@ public abstract class ParserBase extends ParserMinimalBase
 
     @Override // @since 2.15
     public StreamReadConstraints streamReadConstraints() {
-        throw new RuntimeException("cannot use legacy contraints");
+        throw new RuntimeException("cannot use legacy constraints");
     }
 
     /*
