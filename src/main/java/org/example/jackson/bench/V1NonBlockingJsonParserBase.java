@@ -23,8 +23,8 @@ import static com.fasterxml.jackson.core.JsonTokenId.*;
  *
  * @since 2.9
  */
-public abstract class NewNonBlockingJsonParserBase
-    extends ParserBase
+public abstract class V1NonBlockingJsonParserBase
+    extends V1ParserBase
 {
     /*
     /**********************************************************************
@@ -257,8 +257,8 @@ public abstract class NewNonBlockingJsonParserBase
     /**********************************************************************
      */
 
-    public NewNonBlockingJsonParserBase(IOContext ctxt, int parserFeatures,
-                                        ByteQuadsCanonicalizer sym)
+    public V1NonBlockingJsonParserBase(IOContext ctxt, int parserFeatures,
+                                       ByteQuadsCanonicalizer sym)
     {
         super(ctxt, parserFeatures);
         _symbols = sym;

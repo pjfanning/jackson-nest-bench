@@ -2,7 +2,6 @@ package org.example.jackson.bench;
 
 import com.fasterxml.jackson.core.async.ByteArrayFeeder;
 import com.fasterxml.jackson.core.io.IOContext;
-import com.fasterxml.jackson.core.json.async.NonBlockingUtf8JsonParserBase;
 import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
 
 import java.io.IOException;
@@ -17,14 +16,14 @@ import java.io.OutputStream;
  *
  * @since 2.9
  */
-public class NewNonBlockingJsonParser
-    extends NewNonBlockingUtf8JsonParserBase
+public class V1NonBlockingJsonParser
+    extends V1NonBlockingUtf8JsonParserBase
     implements ByteArrayFeeder
 {
     private byte[] _inputBuffer = NO_BYTES;
 
-    public NewNonBlockingJsonParser(IOContext ctxt, int parserFeatures,
-                                    ByteQuadsCanonicalizer sym) {
+    public V1NonBlockingJsonParser(IOContext ctxt, int parserFeatures,
+                                   ByteQuadsCanonicalizer sym) {
         super(ctxt, parserFeatures, sym);
     }
 

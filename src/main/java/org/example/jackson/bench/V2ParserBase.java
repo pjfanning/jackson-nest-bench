@@ -22,7 +22,7 @@ import java.util.Arrays;
  * implementations. Contains most common things that are independent
  * of actual underlying input source.
  */
-public abstract class ParserBase extends ParserMinimalBase
+public abstract class V2ParserBase extends ParserMinimalBase
 {
     // JSON capabilities are the same as defaults
     // @since 2.12
@@ -246,7 +246,8 @@ public abstract class ParserBase extends ParserMinimalBase
      * Not used for  pure integer values.
      */
     protected int _expLength;
-    
+
+    private final int _maxDepth;
     private int _depth;
 
     /*
@@ -255,10 +256,11 @@ public abstract class ParserBase extends ParserMinimalBase
     /**********************************************************
      */
 
-    protected ParserBase(IOContext ctxt, int features) {
+    protected V2ParserBase(IOContext ctxt, int features) {
         super(features);
         _ioContext = ctxt;
         _streamReadConstraints = NewStreamReadConstraints.builder().maxDepth(Integer.MAX_VALUE).build();
+        _maxDepth = _streamReadConstraints.getMaxDepth();
         _textBuffer = ctxt.constructReadConstrainedTextBuffer();
         DupDetector dups = Feature.STRICT_DUPLICATE_DETECTION.enabledIn(features)
                 ? DupDetector.rootDetector(this) : null;
@@ -1552,12 +1554,18 @@ public abstract class ParserBase extends ParserMinimalBase
     protected void _finishString() throws IOException { }
 
     protected final void createChildArrayContext(final int lineNr, final int colNr) {
-        _streamReadConstraints.validateDepth(++_depth);
+        if (_depth > _maxDepth) {
+            throw new IllegalStateException(String.format("Depth (%d) exceeds the maximum allowed depth (%d)",
+                    _depth, _maxDepth));
+        }
         _parsingContext = _parsingContext.createChildArrayContext(lineNr, colNr);
     }
 
     protected final void createChildObjectContext(final int lineNr, final int colNr) {
-        _streamReadConstraints.validateDepth(++_depth);
+        if (_depth > _maxDepth) {
+            throw new IllegalStateException(String.format("Depth (%d) exceeds the maximum allowed depth (%d)",
+                    _depth, _maxDepth));
+        }
         _parsingContext = _parsingContext.createChildObjectContext(lineNr, colNr);
     }
 

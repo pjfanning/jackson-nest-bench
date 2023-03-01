@@ -18,8 +18,8 @@ import java.io.IOException;
  *
  * @since 2.9
  */
-public abstract class NewNonBlockingUtf8JsonParserBase
-    extends NewNonBlockingJsonParserBase
+public abstract class V1NonBlockingUtf8JsonParserBase
+    extends V1NonBlockingJsonParserBase
 {
     @SuppressWarnings("deprecation")
     private final static int FEAT_MASK_TRAILING_COMMA = Feature.ALLOW_TRAILING_COMMA.getMask();
@@ -59,8 +59,8 @@ public abstract class NewNonBlockingUtf8JsonParserBase
     /**********************************************************************
      */
 
-    protected NewNonBlockingUtf8JsonParserBase(IOContext ctxt, int parserFeatures,
-                                               ByteQuadsCanonicalizer sym)
+    protected V1NonBlockingUtf8JsonParserBase(IOContext ctxt, int parserFeatures,
+                                              ByteQuadsCanonicalizer sym)
     {
         super(ctxt, parserFeatures, sym);
     }

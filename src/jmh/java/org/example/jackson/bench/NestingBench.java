@@ -52,9 +52,21 @@ public class NestingBench extends BenchmarkLauncher {
     }
 
     @Benchmark
-    public void newNestedDocReaderParse(Blackhole blackhole) throws Exception {
+    public void v1NestedDocReaderParse(Blackhole blackhole) throws Exception {
         IOContext ctxt = createContext(createContentReference(DOC), true);
-        try (JsonParser jp = new NewReaderBasedJsonParser(ctxt, FACTORY.getParserFeatures(),
+        try (JsonParser jp = new V1ReaderBasedJsonParser(ctxt, FACTORY.getParserFeatures(),
+                new StringReader(DOC), null, _rootCharSymbols.makeChild(DEFAULT_FACTORY_FEATURE_FLAGS))) {
+            JsonToken jt;
+            while ((jt = jp.nextToken()) != null) {
+                blackhole.consume(jt);
+            }
+        }
+    }
+
+    @Benchmark
+    public void v2NestedDocReaderParse(Blackhole blackhole) throws Exception {
+        IOContext ctxt = createContext(createContentReference(DOC), true);
+        try (JsonParser jp = new V2ReaderBasedJsonParser(ctxt, FACTORY.getParserFeatures(),
                 new StringReader(DOC), null, _rootCharSymbols.makeChild(DEFAULT_FACTORY_FEATURE_FLAGS))) {
             JsonToken jt;
             while ((jt = jp.nextToken()) != null) {
@@ -77,7 +89,7 @@ public class NestingBench extends BenchmarkLauncher {
     }
 
     @Benchmark
-    public void newNestedDocUtf8Parse(Blackhole blackhole) throws Exception {
+    public void v1NestedDocUtf8Parse(Blackhole blackhole) throws Exception {
         IOContext ctxt = createContext(createContentReference(DOC), true);
         try (JsonParser jp = new UTF8StreamJsonParser(ctxt, FACTORY.getParserFeatures(),
                 new ByteArrayInputStream(DOC_BYTES), null,
@@ -103,9 +115,9 @@ public class NestingBench extends BenchmarkLauncher {
     }
 
     @Benchmark
-    public void newNestedDocDataInputParse(Blackhole blackhole) throws Exception {
+    public void v1NestedDocDataInputParse(Blackhole blackhole) throws Exception {
         IOContext ctxt = createContext(createContentReference(DOC), true);
-        try (JsonParser jp = new NewUTF8DataInputJsonParser(ctxt, FACTORY.getParserFeatures(),
+        try (JsonParser jp = new V1UTF8DataInputJsonParser(ctxt, FACTORY.getParserFeatures(),
                 new DataInputStream(new ByteArrayInputStream(DOC_BYTES)), null,
                 _byteQuadsCanonicalizer.makeChild(DEFAULT_FACTORY_FEATURE_FLAGS), 0)) {
             JsonToken jt;
@@ -136,9 +148,9 @@ public class NestingBench extends BenchmarkLauncher {
     }
 
     //@Benchmark -- currently hangs
-    public void newNestedAsyncParse(Blackhole blackhole) throws Exception {
+    public void v1NestedAsyncParse(Blackhole blackhole) throws Exception {
         IOContext ctxt = createContext(createContentReference(DOC), true);
-        try (NewNonBlockingJsonParser jp = new NewNonBlockingJsonParser(ctxt, FACTORY.getParserFeatures(),
+        try (V1NonBlockingJsonParser jp = new V1NonBlockingJsonParser(ctxt, FACTORY.getParserFeatures(),
                 _byteQuadsCanonicalizer.makeChild(DEFAULT_FACTORY_FEATURE_FLAGS))) {
             final Runnable r = () -> {
                 try {

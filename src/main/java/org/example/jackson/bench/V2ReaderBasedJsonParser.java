@@ -28,8 +28,8 @@ import static com.fasterxml.jackson.core.JsonTokenId.*;
  * based on a {@link Reader} to handle low-level character
  * conversion tasks.
  */
-public class NewReaderBasedJsonParser
-    extends ParserBase
+public class V2ReaderBasedJsonParser
+    extends V2ParserBase
 {
     @SuppressWarnings("deprecation")
     private final static int FEAT_MASK_TRAILING_COMMA = Feature.ALLOW_TRAILING_COMMA.getMask();
@@ -149,10 +149,10 @@ public class NewReaderBasedJsonParser
      *
      * @since 2.4
      */
-    public NewReaderBasedJsonParser(IOContext ctxt, int features, Reader r,
-                                    ObjectCodec codec, CharsToNameCanonicalizer st,
-                                    char[] inputBuffer, int start, int end,
-                                    boolean bufferRecyclable)
+    public V2ReaderBasedJsonParser(IOContext ctxt, int features, Reader r,
+                                   ObjectCodec codec, CharsToNameCanonicalizer st,
+                                   char[] inputBuffer, int start, int end,
+                                   boolean bufferRecyclable)
     {
         super(ctxt, features);
         _reader = r;
@@ -178,8 +178,8 @@ public class NewReaderBasedJsonParser
      * @param codec {@code ObjectCodec} to delegate object deserialization to
      * @param st Name canonicalizer to use
      */
-    public NewReaderBasedJsonParser(IOContext ctxt, int features, Reader r,
-                                    ObjectCodec codec, CharsToNameCanonicalizer st)
+    public V2ReaderBasedJsonParser(IOContext ctxt, int features, Reader r,
+                                   ObjectCodec codec, CharsToNameCanonicalizer st)
     {
         super(ctxt, features);
         _reader = r;
