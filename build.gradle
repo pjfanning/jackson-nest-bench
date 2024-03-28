@@ -14,11 +14,21 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0-SNAPSHOT'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 test {
     useJUnitPlatform()
+}
+
+jmhJar {
+    manifest {
+        attributes 'Multi-Release': 'true'
+    }
+}
+
+jmh {
+    includes = ['org.example.jackson.bench.InternCacheBench']
 }

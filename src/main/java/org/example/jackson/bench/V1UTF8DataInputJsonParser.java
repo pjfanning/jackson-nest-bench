@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.StreamReadCapability;
+import com.fasterxml.jackson.core.exc.StreamConstraintsException;
 import com.fasterxml.jackson.core.io.CharTypes;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
@@ -317,7 +318,7 @@ public class V1UTF8DataInputJsonParser
         return super.getValueAsInt(defValue);
     }
 
-    protected final String _getText2(JsonToken t)
+    protected final String _getText2(JsonToken t) throws IOException
     {
         if (t == null) {
             return null;
@@ -1782,7 +1783,7 @@ public class V1UTF8DataInputJsonParser
     /**********************************************************
      */
 
-    private final String findName(int q1, int lastQuadBytes) throws JsonParseException
+    private final String findName(int q1, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q1 = pad(q1, lastQuadBytes);
         // Usually we'll find it from the canonical symbol table already
@@ -1795,7 +1796,7 @@ public class V1UTF8DataInputJsonParser
         return addName(_quadBuffer, 1, lastQuadBytes);
     }
 
-    private final String findName(int q1, int q2, int lastQuadBytes) throws JsonParseException
+    private final String findName(int q1, int q2, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q2 = pad(q2, lastQuadBytes);
         // Usually we'll find it from the canonical symbol table already
@@ -1809,7 +1810,7 @@ public class V1UTF8DataInputJsonParser
         return addName(_quadBuffer, 2, lastQuadBytes);
     }
 
-    private final String findName(int q1, int q2, int q3, int lastQuadBytes) throws JsonParseException
+    private final String findName(int q1, int q2, int q3, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q3 = pad(q3, lastQuadBytes);
         String name = _symbols.findName(q1, q2, q3);
@@ -1823,7 +1824,7 @@ public class V1UTF8DataInputJsonParser
         return addName(quads, 3, lastQuadBytes);
     }
 
-    private final String findName(int[] quads, int qlen, int lastQuad, int lastQuadBytes) throws JsonParseException
+    private final String findName(int[] quads, int qlen, int lastQuad, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         if (qlen >= quads.length) {
             _quadBuffer = quads = _growArrayBy(quads, quads.length);
@@ -1842,7 +1843,7 @@ public class V1UTF8DataInputJsonParser
      * multi-byte chars (if any), and then construct Name instance
      * and add it to the symbol table.
      */
-    private final String addName(int[] quads, int qlen, int lastQuadBytes) throws JsonParseException
+    private final String addName(int[] quads, int qlen, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         /* Ok: must decode UTF-8 chars. No other validation is
          * needed, since unescaping has been done earlier as necessary
@@ -2361,7 +2362,7 @@ public class V1UTF8DataInputJsonParser
 
     /**
      * Alternative to {@link #_skipWS} that handles possible {@link EOFException}
-     * caused by trying to read past the end of {@link InputData}.
+     * caused by trying to read past the end of InputData.
      *
      * @since 2.9
      */

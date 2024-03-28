@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.StreamReadCapability;
+import com.fasterxml.jackson.core.exc.StreamConstraintsException;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.json.JsonReadContext;
 import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
@@ -388,7 +389,7 @@ public abstract class V1NonBlockingJsonParserBase
         return _getText2(_currToken);
     }
 
-    protected final String _getText2(JsonToken t)
+    protected final String _getText2(JsonToken t) throws IOException
     {
         if (t == null) {
             return null;
@@ -642,7 +643,7 @@ public abstract class V1NonBlockingJsonParserBase
     /**********************************************************
      */
 
-    protected final String _findName(int q1, int lastQuadBytes) throws JsonParseException
+    protected final String _findName(int q1, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q1 = _padLastQuad(q1, lastQuadBytes);
         // Usually we'll find it from the canonical symbol table already
@@ -655,7 +656,7 @@ public abstract class V1NonBlockingJsonParserBase
         return _addName(_quadBuffer, 1, lastQuadBytes);
     }
 
-    protected final String _findName(int q1, int q2, int lastQuadBytes) throws JsonParseException
+    protected final String _findName(int q1, int q2, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q2 = _padLastQuad(q2, lastQuadBytes);
         // Usually we'll find it from the canonical symbol table already
@@ -669,7 +670,7 @@ public abstract class V1NonBlockingJsonParserBase
         return _addName(_quadBuffer, 2, lastQuadBytes);
     }
 
-    protected final String _findName(int q1, int q2, int q3, int lastQuadBytes) throws JsonParseException
+    protected final String _findName(int q1, int q2, int q3, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         q3 = _padLastQuad(q3, lastQuadBytes);
         String name = _symbols.findName(q1, q2, q3);
@@ -687,7 +688,7 @@ public abstract class V1NonBlockingJsonParserBase
     // table miss. It needs to demultiplex individual bytes, decode
     // multi-byte chars (if any), and then construct Name instance
     // and add it to the symbol table.
-    protected final String _addName(int[] quads, int qlen, int lastQuadBytes) throws JsonParseException
+    protected final String _addName(int[] quads, int qlen, int lastQuadBytes) throws JsonParseException, StreamConstraintsException
     {
         /* Ok: must decode UTF-8 chars. No other validation is
          * needed, since unescaping has been done earlier as necessary

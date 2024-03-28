@@ -398,7 +398,7 @@ public class V2ReaderBasedJsonParser
         return super.getValueAsString(defValue);
     }
 
-    protected final String _getText2(JsonToken t) {
+    protected final String _getText2(JsonToken t) throws IOException {
         if (t == null) {
             return null;
         }
